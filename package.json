@@ -1,0 +1,1 @@
+{"name":"alif-ba","version":"1.0.0","private":true,"scripts":{"sync":"cap sync android"},"dependencies":{"@capacitor-community/text-to-speech":"^8.0.2","@capacitor/android":"^8.6.3","@capacitor/app":"^8.1.2","@capacitor/core":"^8.6.3"},"devDependencies":{"@capacitor/cli":"^8.6.3"}}

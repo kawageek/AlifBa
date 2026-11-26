@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#2EC4B6">
+<title>Alif Ba – J'apprends l'arabe</title>
+<style>
+:root{
+  --bg:#FFF8EC; --ink:#2B2D42; --soft:#6B6F80;
+  --teal:#2EC4B6; --coral:#FF6B6B; --sun:#FFC93C; --sky:#4D96FF; --leaf:#6BCB77; --plum:#9B5DE5; --peach:#FF9F68;
+  --card:#FFFFFF; --shadow:0 6px 0 rgba(43,45,66,.12);
+  --ar:"Noto Naskh Arabic","Noto Sans Arabic","Geeza Pro","Amiri","Arial",serif;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family:"Nunito","Baloo 2",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;overscroll-behavior:none}
+#app{min-height:100%;padding:calc(env(safe-area-inset-top) + 12px) 14px calc(env(safe-area-inset-bottom) + 20px);max-width:760px;margin:0 auto}
+.ar{font-family:var(--ar);direction:rtl}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;padding:0}
+.top{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.top h1{flex:1;margin:0;font-size:24px;text-align:center}
+.round{width:54px;height:54px;border-radius:50%;background:var(--card);box-shadow:var(--shadow);font-size:26px;display:grid;place-items:center;flex:none}
+.round:active,.tile:active,.opt:active,.card:active,.big:active{transform:translateY(3px);box-shadow:0 3px 0 rgba(43,45,66,.12)}
+.stars{background:var(--sun);border-radius:30px;padding:8px 14px;font-weight:800;font-size:20px;box-shadow:var(--shadow);flex:none}
+.hello{text-align:center;margin:4px 0 18px}
+.hello .ar{font-size:40px;font-weight:700;color:var(--teal)}
+.hello .fr{font-size:20px;color:var(--soft)}
+.sect{font-size:18px;font-weight:800;color:var(--soft);margin:18px 4px 10px}
+.grid{display:grid;gap:12px}
+.g2{grid-template-columns:repeat(2,1fr)} .g3{grid-template-columns:repeat(3,1fr)} .g4{grid-template-columns:repeat(4,1fr)}
+@media(min-width:600px){.g3{grid-template-columns:repeat(4,1fr)}.g4{grid-template-columns:repeat(6,1fr)}}
+.tile{border-radius:24px;padding:16px 10px;color:#fff;box-shadow:var(--shadow);text-align:center;min-height:112px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px}
+.tile .ico{font-size:40px;line-height:1}
+.tile .lbl{font-weight:800;font-size:18px}
+.tile .sub{font-size:22px;font-family:var(--ar);opacity:.95}
+.card{background:var(--card);border-radius:22px;box-shadow:var(--shadow);padding:10px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:96px}
+.card .big-ar{font-family:var(--ar);font-size:46px;line-height:1.25}
+.card .emo{font-size:44px;line-height:1.1}
+.card .w{font-family:var(--ar);font-size:22px;direction:rtl}
+.card .f{font-size:14px;color:var(--soft)}
+.card.done{outline:4px solid var(--leaf)}
+.hero{background:var(--card);border-radius:30px;box-shadow:var(--shadow);padding:20px;text-align:center;margin-bottom:16px}
+.hero .giant{font-family:var(--ar);font-size:150px;line-height:1.15;color:var(--plum)}
+.hero .name{font-family:var(--ar);font-size:36px}
+.hero .tr{color:var(--soft);font-size:18px}
+.row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.big{border-radius:22px;padding:16px 22px;font-weight:800;font-size:20px;color:#fff;box-shadow:var(--shadow);display:flex;align-items:center;gap:10px}
+.example{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:10px;background:#F4F7FF;border-radius:20px;padding:12px}
+.example .emo{font-size:64px}
+.example .w{font-family:var(--ar);font-size:38px}
+.prompt{text-align:center;margin:8px 0 18px}
+.prompt .speak{width:96px;height:96px;border-radius:50%;background:var(--sky);color:#fff;font-size:46px;box-shadow:var(--shadow);margin:0 auto;display:grid;place-items:center}
+.prompt .txt{font-size:18px;color:var(--soft);margin-top:10px}
+.opts{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.opt{background:var(--card);border-radius:26px;box-shadow:var(--shadow);min-height:140px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:72px}
+.opt .ar{font-size:76px;line-height:1.2}
+.opt small{font-size:18px;color:var(--soft);font-family:inherit}
+.opt.good{background:#DDF7E2;outline:5px solid var(--leaf)}
+.opt.bad{animation:shake .4s;background:#FFE3E3}
+@keyframes shake{20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
+.progress{display:flex;gap:6px;justify-content:center;margin-bottom:12px}
+.progress i{width:16px;height:16px;border-radius:50%;background:#E3E1DA;display:block}
+.progress i.on{background:var(--sun)}
+.count-box{background:var(--card);border-radius:26px;box-shadow:var(--shadow);padding:14px;display:flex;flex-wrap:wrap;justify-content:center;gap:6px;font-size:48px;min-height:160px;align-content:center;margin-bottom:16px}
+.count-box span{transition:transform .2s}
+.count-box span.tapped{transform:scale(1.25);filter:drop-shadow(0 0 6px var(--sun))}
+.mem{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(min-width:600px){.mem{grid-template-columns:repeat(4,1fr)}}
+.mc{aspect-ratio:1/1;border-radius:20px;box-shadow:var(--shadow);position:relative;perspective:600px}
+.mc .in{position:absolute;inset:0;transition:transform .35s;transform-style:preserve-3d}
+.mc.open .in,.mc.found .in{transform:rotateY(180deg)}
+.mc .fa,.mc .ba{position:absolute;inset:0;border-radius:20px;backface-visibility:hidden;display:grid;place-items:center}
+.mc .fa{background:linear-gradient(135deg,var(--teal),var(--sky));font-size:40px;color:#fff}
+.mc .ba{background:var(--card);transform:rotateY(180deg);font-size:46px;padding:4px;text-align:center}
+.mc .ba .ar{font-size:30px;line-height:1.2}
+.mc.found .ba{background:#DDF7E2}
+.trace-wrap{background:var(--card);border-radius:30px;box-shadow:var(--shadow);position:relative;aspect-ratio:1/1;max-width:520px;margin:0 auto 14px;touch-action:none;overflow:hidden}
+.trace-wrap canvas{position:absolute;inset:0;width:100%;height:100%}
+.meter{height:16px;background:#EEE;border-radius:10px;overflow:hidden;max-width:520px;margin:0 auto 14px}
+.meter b{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--sun),var(--leaf));transition:width .2s}
+.stk{font-size:54px;aspect-ratio:1/1;display:grid;place-items:center;border-radius:20px;background:var(--card);box-shadow:var(--shadow)}
+.stk.lock{filter:grayscale(1) opacity(.25)}
+.celebrate{position:fixed;inset:0;display:grid;place-items:center;pointer-events:none;z-index:50}
+.celebrate .burst{font-size:120px;animation:pop 1s ease-out forwards}
+@keyframes pop{0%{transform:scale(.2);opacity:0}30%{transform:scale(1.2);opacity:1}100%{transform:scale(1);opacity:0}}
+.confetti{position:fixed;top:-20px;font-size:28px;animation:fall 1.6s linear forwards;z-index:49;pointer-events:none}
+@keyframes fall{to{transform:translateY(110vh) rotate(540deg)}}
+.end{text-align:center;padding:30px 10px}
+.end .emo{font-size:110px}
+.end h2{font-size:30px;margin:10px 0}
+.end .ar{font-size:42px;color:var(--teal)}
+.parent label{display:block;font-weight:800;margin:14px 0 6px}
+.parent input,.parent select{width:100%;font:inherit;font-size:20px;padding:12px 14px;border-radius:14px;border:2px solid #DDD;background:#fff;user-select:text;-webkit-user-select:text}
+.hint{font-size:15px;color:var(--soft);text-align:center;margin-top:10px}
+.holdgear{position:relative}
+.holdgear::after{content:"";position:absolute;inset:-4px;border-radius:50%;border:4px solid var(--teal);clip-path:inset(0 100% 0 0);transition:clip-path 1.5s linear}
+.holdgear.holding::after{clip-path:inset(0 0 0 0)}
+.digits{font-size:15px;color:var(--soft)}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+/* =========================================================
+   Alif Ba – application d'apprentissage de l'arabe (5 ans)
+   Contenu : 28 lettres, chiffres 0–10, 11 thématiques
+   Activités : écouter & toucher, tracer, mémoire, compter
+   ========================================================= */
+
+// ---------- CONTENU ----------
+const LETTERS = [
+  {c:'ا',n:'أَلِف',t:'alif',w:'أَرْنَب',wf:'lapin',e:'🐇'},
+  {c:'ب',n:'بَاء',t:'bā',w:'بَطَّة',wf:'canard',e:'🦆'},
+  {c:'ت',n:'تَاء',t:'tā',w:'تُفَّاحَة',wf:'pomme',e:'🍎'},
+  {c:'ث',n:'ثَاء',t:'thā',w:'ثَعْلَب',wf:'renard',e:'🦊'},
+  {c:'ج',n:'جِيم',t:'jīm',w:'جَمَل',wf:'chameau',e:'🐫'},
+  {c:'ح',n:'حَاء',t:'ḥā',w:'حِصَان',wf:'cheval',e:'🐴'},
+  {c:'خ',n:'خَاء',t:'khā',w:'خَرُوف',wf:'mouton',e:'🐑'},
+  {c:'د',n:'دَال',t:'dāl',w:'دُبّ',wf:'ours',e:'🐻'},
+  {c:'ذ',n:'ذَال',t:'dhāl',w:'ذُرَة',wf:'maïs',e:'🌽'},
+  {c:'ر',n:'رَاء',t:'rā',w:'رِيشَة',wf:'plume',e:'🪶'},
+  {c:'ز',n:'زَاي',t:'zāy',w:'زَرَافَة',wf:'girafe',e:'🦒'},
+  {c:'س',n:'سِين',t:'sīn',w:'سَمَكَة',wf:'poisson',e:'🐟'},
+  {c:'ش',n:'شِين',t:'shīn',w:'شَمْس',wf:'soleil',e:'☀️'},
+  {c:'ص',n:'صَاد',t:'ṣād',w:'صَقْر',wf:'faucon',e:'🦅'},
+  {c:'ض',n:'ضَاد',t:'ḍād',w:'ضِفْدَع',wf:'grenouille',e:'🐸'},
+  {c:'ط',n:'طَاء',t:'ṭā',w:'طَائِرَة',wf:'avion',e:'✈️'},
+  {c:'ظ',n:'ظَاء',t:'ẓā',w:'ظَرْف',wf:'enveloppe',e:'✉️'},
+  {c:'ع',n:'عَيْن',t:'ʿayn',w:'عِنَب',wf:'raisin',e:'🍇'},
+  {c:'غ',n:'غَيْن',t:'ghayn',w:'غَيْمَة',wf:'nuage',e:'☁️'},
+  {c:'ف',n:'فَاء',t:'fā',w:'فِيل',wf:'éléphant',e:'🐘'},
+  {c:'ق',n:'قَاف',t:'qāf',w:'قِطّ',wf:'chat',e:'🐱'},
+  {c:'ك',n:'كَاف',t:'kāf',w:'كَلْب',wf:'chien',e:'🐶'},
+  {c:'ل',n:'لَام',t:'lām',w:'لَيْمُون',wf:'citron',e:'🍋'},
+  {c:'م',n:'مِيم',t:'mīm',w:'مَوْز',wf:'banane',e:'🍌'},
+  {c:'ن',n:'نُون',t:'nūn',w:'نَحْلَة',wf:'abeille',e:'🐝'},
+  {c:'ه',n:'هَاء',t:'hā',w:'هِلَال',wf:'croissant de lune',e:'🌙'},
+  {c:'و',n:'وَاو',t:'wāw',w:'وَرْدَة',wf:'rose',e:'🌹'},
+  {c:'ي',n:'يَاء',t:'yā',w:'يَد',wf:'main',e:'✋'},
+];
+
+const AR_DIGITS = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩','١٠'];
+const NUMBERS = [
+  {v:0,n:'صِفْر',t:'ṣifr'},{v:1,n:'وَاحِد',t:'wāḥid'},{v:2,n:'اِثْنَان',t:'ithnān'},
+  {v:3,n:'ثَلَاثَة',t:'thalātha'},{v:4,n:'أَرْبَعَة',t:'arbaʿa'},{v:5,n:'خَمْسَة',t:'khamsa'},
+  {v:6,n:'سِتَّة',t:'sitta'},{v:7,n:'سَبْعَة',t:'sabʿa'},{v:8,n:'ثَمَانِيَة',t:'thamāniya'},
+  {v:9,n:'تِسْعَة',t:'tisʿa'},{v:10,n:'عَشَرَة',t:'ʿashara'},
+];
+
+// [emoji, arabe, français]
+const THEMES = [
+  {id:'animaux',fr:'Les animaux',ar:'الحَيَوَانَات',ico:'🦁',col:'#FF9F68',items:[
+    ['🦁','أَسَد','lion'],['🐱','قِطّ','chat'],['🐶','كَلْب','chien'],['🐘','فِيل','éléphant'],
+    ['🦒','زَرَافَة','girafe'],['🐒','قِرْد','singe'],['🐄','بَقَرَة','vache'],['🐔','دَجَاجَة','poule'],
+    ['🐇','أَرْنَب','lapin'],['🐢','سُلَحْفَاة','tortue']]},
+  {id:'mer',fr:'La mer',ar:'البَحْر',ico:'🐠',col:'#4D96FF',items:[
+    ['🐟','سَمَكَة','poisson'],['🐋','حُوت','baleine'],['🐬','دُلْفِين','dauphin'],['🐙','أُخْطُبُوط','pieuvre'],
+    ['🦀','سَرَطَان','crabe'],['🦈','قِرْش','requin'],['🐚','صَدَفَة','coquillage'],['⛵','قَارِب','bateau à voile']]},
+  {id:'nature',fr:'La nature',ar:'الطَّبِيعَة',ico:'🌳',col:'#6BCB77',items:[
+    ['🌳','شَجَرَة','arbre'],['🌸','زَهْرَة','fleur'],['⛰️','جَبَل','montagne'],['🌊','بَحْر','mer'],
+    ['🌧️','مَطَر','pluie'],['☀️','شَمْس','soleil'],['☁️','غَيْمَة','nuage'],['❄️','ثَلْج','neige'],
+    ['🍃','وَرَقَة','feuille'],['🌈','قَوْس قُزَح','arc-en-ciel']]},
+  {id:'espace',fr:"L'espace",ar:'الفَضَاء',ico:'🚀',col:'#5A4FCF',items:[
+    ['🌙','قَمَر','lune'],['⭐','نَجْمَة','étoile'],['🚀','صَارُوخ','fusée'],['🪐','كَوْكَب','planète'],
+    ['🌍','الأَرْض','la Terre'],['🧑‍🚀','رَائِد فَضَاء','astronaute'],['☄️','مُذَنَّب','comète'],
+    ['🔭','مِنْظَار','télescope'],['🛰️','قَمَر صِنَاعِيّ','satellite']]},
+  {id:'transports',fr:'Les transports',ar:'المُوَاصَلَات',ico:'🚗',col:'#FF6B6B',items:[
+    ['🚗','سَيَّارَة','voiture'],['🚌','حَافِلَة','bus'],['🚆','قِطَار','train'],['✈️','طَائِرَة','avion'],
+    ['🚢','سَفِينَة','bateau'],['🚲','دَرَّاجَة','vélo'],['🚚','شَاحِنَة','camion'],['🚁','مِرْوَحِيَّة','hélicoptère'],
+    ['🚑','سَيَّارَة إِسْعَاف','ambulance'],['🚒','سَيَّارَة إِطْفَاء','camion de pompiers']]},
+  {id:'famille',fr:'La famille',ar:'العَائِلَة',ico:'👨‍👩‍👧‍👦',col:'#F15BB5',items:[
+    ['👨','أَب','papa'],['👩','أُمّ','maman'],['👦','أَخ','frère'],['👧','أُخْت','sœur'],
+    ['👴','جَدّ','grand-père'],['👵','جَدَّة','grand-mère'],['👶','رَضِيع','bébé'],['👨‍👩‍👧‍👦','عَائِلَة','famille']]},
+  {id:'parc',fr:'Au parc',ar:'فِي الحَدِيقَة',ico:'🛝',col:'#2EC4B6',items:[
+    ['🛝','زُحْلُوقَة','toboggan'],['⚽','كُرَة','ballon'],['🪁','طَائِرَة وَرَقِيَّة','cerf-volant'],['🐦','عُصْفُور','oiseau'],
+    ['🎈','بَالُون','ballon de baudruche'],['🍦','مُثَلَّجَات','glace'],['🦋','فَرَاشَة','papillon'],
+    ['⛲','نَافُورَة','fontaine'],['🐿️','سِنْجَاب','écureuil']]},
+  {id:'fruits',fr:'Fruits et légumes',ar:'الفَوَاكِه وَالخُضَر',ico:'🍎',col:'#E63946',items:[
+    ['🍎','تُفَّاحَة','pomme'],['🍌','مَوْز','banane'],['🍇','عِنَب','raisin'],['🍊','بُرْتُقَالَة','orange'],
+    ['🍓','فَرَاوْلَة','fraise'],['🍉','بِطِّيخ','pastèque'],['🥕','جَزَر','carotte'],['🍅','طَمَاطِم','tomate'],
+    ['🥔','بَطَاطَا','pomme de terre'],['🥒','خِيَار','concombre']]},
+  {id:'couleurs',fr:'Les couleurs',ar:'الأَلْوَان',ico:'🎨',col:'#9B5DE5',items:[
+    ['🔴','أَحْمَر','rouge'],['🔵','أَزْرَق','bleu'],['🟢','أَخْضَر','vert'],['🟡','أَصْفَر','jaune'],
+    ['🟠','بُرْتُقَالِيّ','orange'],['🟣','بَنَفْسَجِيّ','violet'],['⚫','أَسْوَد','noir'],['⚪','أَبْيَض','blanc'],
+    ['🟤','بُنِّيّ','marron']]},
+  {id:'maison',fr:'La maison',ar:'البَيْت',ico:'🏠',col:'#FFB703',items:[
+    ['🏠','بَيْت','maison'],['🚪','بَاب','porte'],['🛏️','سَرِير','lit'],['🪑','كُرْسِيّ','chaise'],
+    ['🔑','مِفْتَاح','clé'],['🕰️','سَاعَة','horloge'],['☕','كُوب','tasse'],['💡','مِصْبَاح','lampe'],
+    ['📺','تِلْفَاز','télé'],['🪟','نَافِذَة','fenêtre']]},
+  {id:'corps',fr:'Mon corps',ar:'جِسْمِي',ico:'🖐️',col:'#00A6A6',items:[
+    ['👁️','عَيْن','œil'],['👂','أُذُن','oreille'],['👃','أَنْف','nez'],['👄','فَم','bouche'],
+    ['✋','يَد','main'],['🦵','رِجْل','jambe'],['🦶','قَدَم','pied'],['🦷','سِنّ','dent']]},
+];
+
+const STICKERS = ['🦁','🐼','🦄','🚀','🌈','🐬','🦖','🚒','🍉','🐝','🦉','🪐','🐢','🚂','🌻','🦊','🐙','⚽','🏰','🎈','🐫','🦒','🛸','🏆'];
+const STARS_PER_STICKER = 5;
+const PRAISE_AR = ['أَحْسَنْتَ','مُمْتَاز','رَائِع','بَارَكَ اللهُ فِيكَ','عَمَل جَمِيل'];
+const PRAISE_FR = ['Bravo','Super','Génial','Excellent','Trop fort'];
+const ROUNDS = 6;
+
+// ---------- ÉTAT (sauvegarde locale) ----------
+const DEFAULT = {name:'', stars:0, seenL:[], seenN:[], digits:'both', rate:0.85};
+let S = load();
+function load(){ try{ return Object.assign({},DEFAULT,JSON.parse(localStorage.getItem('alifba')||'{}')); }catch(e){ return Object.assign({},DEFAULT); } }
+function save(){ try{ localStorage.setItem('alifba',JSON.stringify(S)); }catch(e){} }
+
+// ---------- VOIX (TTS) ----------
+// Dans l'APK : plugin natif @capacitor-community/text-to-speech. Dans le navigateur : Web Speech API.
+const isNative = () => !!(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform());
+const nativePlugin = name => { if(!isNative()) return null; const C=window.Capacitor; nativePlugin.c=nativePlugin.c||{};
+  if(!nativePlugin.c[name]) nativePlugin.c[name] = (C.registerPlugin ? C.registerPlugin(name) : (C.Plugins||{})[name]) || null; return nativePlugin.c[name]; };
+const NativeTTS = () => nativePlugin('TextToSpeech');
+let speakToken = 0;
+function pickVoice(lang){
+  if(!('speechSynthesis' in window)) return null;
+  const vs = speechSynthesis.getVoices(); const p = lang.slice(0,2);
+  return vs.find(v=>v.lang.replace('_','-')===lang) || vs.find(v=>v.lang.toLowerCase().startsWith(p)) || null;
+}
+if('speechSynthesis' in window){ speechSynthesis.onvoiceschanged = ()=>{}; speechSynthesis.getVoices(); }
+function sayOne(text, lang){
+  return new Promise(res=>{
+    const tts = NativeTTS();
+    if(tts){ tts.speak({text, lang, rate:S.rate, pitch:1.05, volume:1}).then(res).catch(res); return; }
+    if(!('speechSynthesis' in window)){ setTimeout(res,400); return; }
+    const u = new SpeechSynthesisUtterance(text); u.lang = lang; u.rate = S.rate; u.pitch = 1.05;
+    const v = pickVoice(lang); if(v) u.voice = v;
+    let done=false; const fin=()=>{ if(!done){done=true;res();} };
+    u.onend = fin; u.onerror = fin; setTimeout(fin, 900 + text.length*160);
+    speechSynthesis.speak(u);
+  });
+}
+// parts: [['fr','Touche'],['ar','قِطّ']]
+async function say(...parts){
+  const my = ++speakToken;
+  stopSpeech(false);
+  for(const [l,t] of parts){
+    if(my!==speakToken) return;
+    await sayOne(t, l==='ar' ? 'ar-SA' : 'fr-FR');
+  }
+}
+function stopSpeech(bump=true){
+  if(bump) speakToken++;
+  const tts = NativeTTS(); if(tts){ try{ tts.stop(); }catch(e){} }
+  if('speechSynthesis' in window) speechSynthesis.cancel();
+}
+
+// ---------- OUTILS ----------
+const $ = s => document.querySelector(s);
+const app = $('#app');
+const shuffle = a => { a=[...a]; for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]];} return a; };
+const pick = (a,n) => shuffle(a).slice(0,n);
+const rnd = a => a[Math.random()*a.length|0];
+const childName = () => S.name.trim();
+function digitHTML(v){
+  if(S.digits==='ar') return `<span class="ar">${AR_DIGITS[v]}</span>`;
+  if(S.digits==='lat') return `<span>${v}</span>`;
+  return `<span class="ar">${AR_DIGITS[v]}</span><small>${v}</small>`;
+}
+function vibrate(ms){ try{ navigator.vibrate && navigator.vibrate(ms); }catch(e){} }
+
+// Navigation avec pile (bouton retour Android)
+const stack = [];
+function go(fn, ...args){ stopSpeech(); cleanup(); stack.push([fn,args]); fn(...args); window.scrollTo(0,0); }
+function back(){ stopSpeech(); cleanup(); if(stack.length>1){ stack.pop(); const [fn,args]=stack[stack.length-1]; fn(...args); window.scrollTo(0,0);} }
+function home(){ stack.length=0; go(Home); }
+let cleanups=[]; function cleanup(){ cleanups.forEach(f=>f()); cleanups=[]; }
+function bar(title, showStars=true){
+  return `<div class="top"><button class="round" onclick="back()" aria-label="Retour">⬅️</button><h1>${title}</h1>${showStars?`<div class="stars">⭐ ${S.stars}</div>`:'<div style="width:54px"></div>'}</div>`;
+}
+
+// Récompenses
+function addStar(){
+  const before = Math.floor(S.stars/STARS_PER_STICKER);
+  S.stars++; save();
+  const after = Math.floor(S.stars/STARS_PER_STICKER);
+  const st = document.querySelector('.stars'); if(st) st.textContent = '⭐ '+S.stars;
+  return after>before && after<=STICKERS.length ? STICKERS[after-1] : null;
+}
+function celebrate(emoji='⭐'){
+  const c = document.createElement('div'); c.className='celebrate'; c.innerHTML=`<div class="burst">${emoji}</div>`;
+  document.body.appendChild(c); setTimeout(()=>c.remove(),1000);
+  for(let i=0;i<14;i++){ const f=document.createElement('div'); f.className='confetti';
+    f.textContent=rnd(['⭐','✨','🎉','🌟','💛']); f.style.left=(Math.random()*100)+'vw'; f.style.animationDelay=(Math.random()*.4)+'s';
+    document.body.appendChild(f); setTimeout(()=>f.remove(),2200); }
+}
+function praise(){
+  const n = childName();
+  return say(['ar', rnd(PRAISE_AR)], ['fr', rnd(PRAISE_FR)+(n?' '+n:'')+' !']);
+}
+
+// ---------- ÉCRANS ----------
+function Home(){
+  const n = childName();
+  app.innerHTML = `
+  <div class="top">
+    <button class="round holdgear" id="gear" aria-label="Espace parent">⚙️</button>
+    <h1></h1><div class="stars">⭐ ${S.stars}</div>
+  </div>
+  <div class="hello">
+    <div class="ar">مَرْحَبًا${n?' '+n:''} 👋</div>
+    <div class="fr">On apprend l'arabe ?</div>
+  </div>
+  <div class="sect">📚 Apprendre</div>
+  <div class="grid g2">
+    <button class="tile" style="background:var(--plum)" onclick="go(Letters)"><div class="sub" dir="rtl">أ ب ت</div><div class="lbl">Les lettres</div></button>
+    <button class="tile" style="background:var(--sky)" onclick="go(Numbers)"><div class="sub" dir="ltr">١ ٢ ٣</div><div class="lbl">Les chiffres</div></button>
+  </div>
+  <div class="sect">🌍 Les thèmes</div>
+  <div class="grid g3">
+    ${THEMES.map(t=>`<button class="tile" style="background:${t.col}" onclick="go(Theme,'${t.id}')"><div class="ico">${t.ico}</div><div class="lbl" style="font-size:15px">${t.fr}</div></button>`).join('')}
+  </div>
+  <div class="sect">🎮 Les jeux</div>
+  <div class="grid g2">
+    <button class="tile" style="background:var(--teal)" onclick="go(QuizMenu)"><div class="ico">👂</div><div class="lbl">Écoute et touche</div></button>
+    <button class="tile" style="background:var(--coral)" onclick="go(TraceMenu)"><div class="ico">✏️</div><div class="lbl">Je trace</div></button>
+    <button class="tile" style="background:var(--leaf)" onclick="go(MemoryMenu)"><div class="ico">🃏</div><div class="lbl">Mémoire</div></button>
+    <button class="tile" style="background:var(--peach)" onclick="go(Count)"><div class="ico">🔢</div><div class="lbl">Je compte</div></button>
+  </div>
+  <div class="sect">🏆 Mes récompenses</div>
+  <button class="tile" style="background:var(--sun);color:var(--ink);width:100%" onclick="go(Stickers)"><div class="ico">🎁</div><div class="lbl">Mes autocollants (${Math.min(Math.floor(S.stars/STARS_PER_STICKER),STICKERS.length)}/${STICKERS.length})</div></button>
+  <p class="hint">Parents : appui long sur ⚙️ pour les réglages</p>`;
+  // appui long 1,5 s pour l'espace parent (évite que l'enfant y aille par hasard)
+  const g = $('#gear'); let t;
+  const start = e=>{ e.preventDefault(); g.classList.add('holding'); t=setTimeout(()=>{ g.classList.remove('holding'); go(Parent); },1500); };
+  const end = ()=>{ clearTimeout(t); g.classList.remove('holding'); };
+  g.addEventListener('pointerdown',start); g.addEventListener('pointerup',end); g.addEventListener('pointerleave',end); g.addEventListener('pointercancel',end);
+  if(stack.length<=1 && !Home.greeted){ Home.greeted=true; }
+}
+
+function Letters(){
+  app.innerHTML = bar('Les lettres') + `
+  <div class="grid g4 ar">
+    ${LETTERS.map((l,i)=>`<button class="card ${S.seenL.includes(i)?'done':''}" onclick="go(Letter,${i})"><div class="big-ar">${l.c}</div></button>`).join('')}
+  </div>
+  <p class="hint">Touche une lettre pour l'écouter. Les lettres vues ont un contour vert.</p>`;
+}
+
+function Letter(i){
+  const l = LETTERS[i];
+  if(!S.seenL.includes(i)){ S.seenL.push(i); save(); }
+  app.innerHTML = bar(`Lettre ${i+1} / 28`) + `
+  <div class="hero">
+    <button class="giant" id="g">${l.c}</button>
+    <div class="name ar">${l.n}</div>
+    <div class="tr">« ${l.t} »</div>
+    <button class="example" id="ex"><span class="emo">${l.e}</span><span><div class="w">${l.w}</div><div class="tr">${l.wf}</div></span></button>
+  </div>
+  <div class="row">
+    <button class="big" style="background:var(--soft);${i===0?'opacity:.3':''}" ${i===0?'disabled':''} onclick="stack.pop();go(Letter,${i-1})">◀</button>
+    <button class="big" style="background:var(--sky)" id="rep">🔊 Écouter</button>
+    <button class="big" style="background:var(--coral)" onclick="go(Trace,'L',${i})">✏️ Tracer</button>
+    <button class="big" style="background:var(--soft);${i===27?'opacity:.3':''}" ${i===27?'disabled':''} onclick="stack.pop();go(Letter,${i+1})">▶</button>
+  </div>`;
+  const play = ()=>say(['ar',l.n],['fr','comme dans'],['ar',l.w]);
+  $('#g').onclick = ()=>say(['ar',l.n]);
+  $('#ex').onclick = ()=>say(['ar',l.w],['fr',l.wf]);
+  $('#rep').onclick = play;
+  play();
+}
+
+function Numbers(){
+  app.innerHTML = bar('Les chiffres') + `
+  <div class="grid g3">
+    ${NUMBERS.map(n=>`<button class="card ${S.seenN.includes(n.v)?'done':''}" onclick="go(NumberView,${n.v})"><div class="big-ar">${AR_DIGITS[n.v]}</div><div class="f">${n.v}</div></button>`).join('')}
+  </div>`;
+}
+
+function NumberView(v){
+  const n = NUMBERS[v];
+  if(!S.seenN.includes(v)){ S.seenN.push(v); save(); }
+  const obj = rnd(['🍎','⭐','🐟','🎈','🚗','🐥','🌸']);
+  app.innerHTML = bar(`Le chiffre ${v}`) + `
+  <div class="hero">
+    <button class="giant" id="g" style="color:var(--sky)">${AR_DIGITS[v]}</button>
+    <div style="font-size:40px;font-weight:800;color:var(--soft)">${v}</div>
+    <div class="name ar">${n.n}</div>
+    <div class="tr">« ${n.t} »</div>
+    <div class="count-box" style="box-shadow:none;background:#F4F7FF;min-height:80px" id="objs">${v===0?'<span style="font-size:22px;color:var(--soft)">rien du tout !</span>':Array.from({length:v},()=>`<span>${obj}</span>`).join('')}</div>
+  </div>
+  <div class="row">
+    <button class="big" style="background:var(--soft);${v===0?'opacity:.3':''}" ${v===0?'disabled':''} onclick="stack.pop();go(NumberView,${v-1})">◀</button>
+    <button class="big" style="background:var(--sky)" id="rep">🔊 Écouter</button>
+    <button class="big" style="background:var(--peach)" id="cnt">🔢 Compter</button>
+    <button class="big" style="background:var(--soft);${v===10?'opacity:.3':''}" ${v===10?'disabled':''} onclick="stack.pop();go(NumberView,${v+1})">▶</button>
+  </div>`;
+  $('#g').onclick = $('#rep').onclick = ()=>say(['ar',n.n]);
+  // compter les objets un par un en arabe
+  $('#cnt').onclick = async ()=>{
+    const spans=[...document.querySelectorAll('#objs span')]; if(v===0){ say(['ar','صِفْر']); return; }
+    const my=++speakToken;
+    for(let k=0;k<spans.length;k++){ if(my!==speakToken) return; spans[k].classList.add('tapped'); await sayOne(NUMBERS[k+1].n,'ar-SA'); }
+  };
+  say(['ar',n.n]);
+}
+
+function Theme(id){
+  const t = THEMES.find(x=>x.id===id);
+  app.innerHTML = bar(t.fr) + `
+  <div class="hello"><div class="ar" style="color:${t.col}">${t.ar}</div></div>
+  <div class="grid g2">
+    ${t.items.map((it,k)=>`<button class="card" data-k="${k}"><div class="emo">${it[0]}</div><div class="w">${it[1]}</div><div class="f">${it[2]}</div></button>`).join('')}
+  </div>
+  <div class="sect">🎮 Jouer avec ce thème</div>
+  <div class="grid g3">
+    <button class="tile" style="background:var(--teal);min-height:96px" onclick="go(Quiz,'T','${id}')"><div class="ico">👂</div><div class="lbl" style="font-size:15px">Écoute</div></button>
+    <button class="tile" style="background:var(--leaf);min-height:96px" onclick="go(Memory,'T','${id}')"><div class="ico">🃏</div><div class="lbl" style="font-size:15px">Mémoire</div></button>
+    <button class="tile" style="background:var(--peach);min-height:96px" onclick="go(Count,'${id}')"><div class="ico">🔢</div><div class="lbl" style="font-size:15px">Compter</div></button>
+  </div>`;
+  app.querySelectorAll('.card[data-k]').forEach(b=>b.onclick=()=>{ const it=t.items[+b.dataset.k]; say(['ar',it[1]],['fr',it[2]]); });
+  say(['ar',t.ar]);
+}
+
+// ----- Menus de jeux -----
+function sourcePicker(title, cb){
+  app.innerHTML = bar(title) + `
+  <div class="grid g2">
+    <button class="tile" style="background:var(--plum)" data-s="L"><div class="sub" dir="rtl">أ ب ت</div><div class="lbl">Les lettres</div></button>
+    <button class="tile" style="background:var(--sky)" data-s="N"><div class="sub" dir="ltr">١ ٢ ٣</div><div class="lbl">Les chiffres</div></button>
+  </div>
+  <div class="sect">Ou un thème</div>
+  <div class="grid g3">${THEMES.map(t=>`<button class="tile" style="background:${t.col}" data-t="${t.id}"><div class="ico">${t.ico}</div><div class="lbl" style="font-size:15px">${t.fr}</div></button>`).join('')}</div>`;
+  app.querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>cb(b.dataset.s));
+  app.querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>cb('T',b.dataset.t));
+}
+function QuizMenu(){ sourcePicker('Écoute et touche',(s,id)=>go(Quiz,s,id)); }
+function MemoryMenu(){ sourcePicker('Mémoire',(s,id)=>go(Memory,s,id)); }
+
+// Banque d'éléments pour les jeux : {key, show(HTML option), say(parts), label}
+function bank(src, id){
+  if(src==='L') return LETTERS.map((l,i)=>({key:'L'+i, opt:`<span class="ar">${l.c}</span>`, prompt:[['fr','Touche la lettre'],['ar',l.n]], name:[['ar',l.n]], pair:`<span>${l.e}</span>`, pairSay:[['ar',l.n],['fr','comme'],['ar',l.w]]}));
+  if(src==='N') return NUMBERS.filter(n=>n.v>0).map(n=>({key:'N'+n.v, opt:digitHTML(n.v), prompt:[['fr','Touche le chiffre'],['ar',n.n]], name:[['ar',n.n]], pair:`<span style="font-size:22px;line-height:1.1">${'🔵'.repeat(n.v)}</span>`, pairSay:[['ar',n.n]]}));
+  const t = THEMES.find(x=>x.id===id);
+  return t.items.map((it,k)=>({key:'T'+k, opt:`<span>${it[0]}</span>`, prompt:[['fr','Où est'],['ar',it[1]]], name:[['ar',it[1]],['fr',it[2]]], pair:`<span class="ar">${it[1]}</span>`, pairSay:[['ar',it[1]]]}));
+}
+
+// ----- Jeu 1 : Écoute et touche -----
+function Quiz(src,id){
+  const items = bank(src,id);
+  const targets = pick(items, Math.min(ROUNDS, items.length));
+  let round=0, score=0, locked=false, tries=0;
+  const title = src==='L'?'Écoute : lettres':src==='N'?'Écoute : chiffres':'Écoute : '+THEMES.find(x=>x.id===id).fr;
+  function draw(){
+    if(round>=targets.length) return End(score, targets.length, ()=>{stack.pop();go(Quiz,src,id);});
+    const target = targets[round];
+    const opts = shuffle([target, ...pick(items.filter(x=>x.key!==target.key),3)]);
+    tries=0; locked=false;
+    app.innerHTML = bar(title) + `
+      <div class="progress">${targets.map((_,k)=>`<i class="${k<round?'on':''}"></i>`).join('')}</div>
+      <div class="prompt"><button class="speak" id="sp">🔊</button><div class="txt">Écoute bien, puis touche la bonne réponse</div></div>
+      <div class="opts">${opts.map((o,k)=>`<button class="opt" data-k="${k}">${o.opt}</button>`).join('')}</div>`;
+    $('#sp').onclick = ()=>say(...target.prompt);
+    app.querySelectorAll('.opt').forEach(b=>b.onclick=async ()=>{
+      if(locked) return;
+      const o = opts[+b.dataset.k];
+      if(o.key===target.key){
+        locked=true; b.classList.add('good'); vibrate(40);
+        if(tries===0){ score++; const st=addStar(); celebrate(st||'⭐'); }
+        await praise(); round++; setTimeout(draw,250);
+      }else{
+        tries++; b.classList.add('bad'); vibrate([30,40,30]);
+        setTimeout(()=>b.classList.remove('bad'),450);
+        say(...o.name, ['fr','Essaie encore !']);
+      }
+    });
+    setTimeout(()=>say(...target.prompt),300);
+  }
+  draw();
+}
+
+// ----- Jeu 2 : Mémoire -----
+function Memory(src,id){
+  const items = bank(src,id);
+  const chosen = pick(items, 6);
+  const cards = shuffle(chosen.flatMap(it=>[{k:it.key,html:it.opt,it},{k:it.key,html:it.pair,it}]));
+  let open=[], found=0, moves=0, busy=false;
+  const title = src==='L'?'Mémoire : lettres':src==='N'?'Mémoire : chiffres':'Mémoire : '+THEMES.find(x=>x.id===id).fr;
+  app.innerHTML = bar(title) + `
+    <p class="hint" style="margin-top:0">Retourne deux cartes qui vont ensemble</p>
+    <div class="mem">${cards.map((c,i)=>`<button class="mc" data-i="${i}"><div class="in"><div class="fa">✨</div><div class="ba">${c.html}</div></div></button>`).join('')}</div>`;
+  say(['fr','Retourne deux cartes qui vont ensemble']);
+  app.querySelectorAll('.mc').forEach(el=>el.onclick=()=>{
+    const i=+el.dataset.i; const c=cards[i];
+    if(busy || el.classList.contains('open') || el.classList.contains('found')) return;
+    el.classList.add('open'); open.push([el,c]); say(...c.it.pairSay);
+    if(open.length===2){
+      moves++; busy=true;
+      const [[e1,c1],[e2,c2]] = open;
+      if(c1.k===c2.k){
+        setTimeout(async ()=>{ e1.classList.add('found'); e2.classList.add('found'); vibrate(40);
+          found++; const st=addStar(); celebrate(st||'⭐'); open=[]; busy=false;
+          if(found===chosen.length){ await praise(); End(found, chosen.length, ()=>{stack.pop();go(Memory,src,id);}, 'Toutes les paires trouvées !'); }
+        },500);
+      }else{
+        setTimeout(()=>{ e1.classList.remove('open'); e2.classList.remove('open'); open=[]; busy=false; },1100);
+      }
+    }
+  });
+}
+
+// ----- Jeu 3 : Compter -----
+function Count(themeId){
+  const pool = themeId ? THEMES.find(x=>x.id===themeId).items : THEMES.flatMap(t=>t.items).filter(it=>!['🔴','🔵','🟢','🟡','🟠','🟣','⚫','⚪','🟤','👨‍👩‍👧‍👦','🧑‍🚀'].includes(it[0]));
+  const targets = pick([1,2,3,4,5,6,7,8,9,10], ROUNDS);
+  let round=0, score=0, tries=0, locked=false;
+  function draw(){
+    if(round>=targets.length) return End(score, targets.length, ()=>{stack.pop();go(Count,themeId);});
+    const v = targets[round]; const it = rnd(pool);
+    const others = pick([1,2,3,4,5,6,7,8,9,10].filter(x=>x!==v),2);
+    const opts = shuffle([v,...others]); tries=0; locked=false;
+    app.innerHTML = bar('Je compte') + `
+      <div class="progress">${targets.map((_,k)=>`<i class="${k<round?'on':''}"></i>`).join('')}</div>
+      <div class="prompt" style="margin:0 0 10px"><button class="speak" id="sp" style="width:70px;height:70px;font-size:32px">🔊</button></div>
+      <div class="count-box" id="box">${Array.from({length:v},(_,k)=>`<span data-k="${k}">${it[0]}</span>`).join('')}</div>
+      <p class="hint" style="margin:-6px 0 12px">Touche chaque objet pour compter en arabe</p>
+      <div class="opts" style="grid-template-columns:repeat(3,1fr)">${opts.map(o=>`<button class="opt" style="min-height:120px" data-v="${o}">${digitHTML(o)}</button>`).join('')}</div>`;
+    const ask = ()=>say(['fr','Combien y a-t-il de'],['ar',it[1]],['fr','?']);
+    $('#sp').onclick = ask;
+    let counted=0;
+    app.querySelectorAll('#box span').forEach(s=>s.onclick=()=>{ if(s.classList.contains('tapped')) return; s.classList.add('tapped'); counted++; say(['ar',NUMBERS[counted].n]); });
+    app.querySelectorAll('.opt').forEach(b=>b.onclick=async ()=>{
+      if(locked) return; const o=+b.dataset.v;
+      if(o===v){ locked=true; b.classList.add('good'); vibrate(40);
+        if(tries===0){ score++; const st=addStar(); celebrate(st||'⭐'); }
+        await say(['ar',NUMBERS[v].n]); await praise(); round++; setTimeout(draw,250);
+      }else{ tries++; b.classList.add('bad'); vibrate([30,40,30]); setTimeout(()=>b.classList.remove('bad'),450);
+        say(['ar',NUMBERS[o].n],['fr','Non, recompte avec ton doigt !']); }
+    });
+    setTimeout(ask,300);
+  }
+  draw();
+}
+
+// ----- Jeu 4 : Tracer -----
+function TraceMenu(){
+  app.innerHTML = bar('Je trace') + `
+  <div class="sect">Les lettres</div>
+  <div class="grid g4">${LETTERS.map((l,i)=>`<button class="card" onclick="go(Trace,'L',${i})"><div class="big-ar">${l.c}</div></button>`).join('')}</div>
+  <div class="sect">Les chiffres</div>
+  <div class="grid g4">${NUMBERS.map(n=>`<button class="card" onclick="go(Trace,'N',${n.v})"><div class="big-ar">${AR_DIGITS[n.v]}</div></button>`).join('')}</div>`;
+}
+function Trace(kind, i){
+  const isL = kind==='L';
+  const ch = isL ? LETTERS[i].c : AR_DIGITS[i];
+  const nm = isL ? LETTERS[i].n : NUMBERS[i].n;
+  const max = isL ? 27 : 10;
+  app.innerHTML = bar(isL?`Trace la lettre ${nm}`:`Trace le chiffre ${i}`) + `
+    <div class="trace-wrap" id="wrap"><canvas id="guide"></canvas><canvas id="draw"></canvas></div>
+    <div class="meter"><b id="m"></b></div>
+    <div class="row">
+      <button class="big" style="background:var(--soft)" id="clr">🧽 Effacer</button>
+      <button class="big" style="background:var(--sky)" id="rep">🔊</button>
+      <button class="big" style="background:var(--leaf)" id="nx">Suivant ▶</button>
+    </div>
+    <p class="hint">Suis la lettre grise avec ton doigt</p>`;
+  const wrap=$('#wrap'), gc=$('#guide'), dc=$('#draw');
+  const dpr = Math.min(window.devicePixelRatio||1, 2);
+  const W = wrap.clientWidth;
+  [gc,dc].forEach(c=>{ c.width=W*dpr; c.height=W*dpr; });
+  const g=gc.getContext('2d'), d=dc.getContext('2d');
+  g.scale(dpr,dpr); d.scale(dpr,dpr);
+  const fontPx = Math.round(W*(isL?0.62:0.6));
+  const font = `bold ${fontPx}px ${getComputedStyle(document.documentElement).getPropertyValue('--ar')}`;
+  // mesurer pour centrer verticalement
+  g.font=font; g.textAlign='center'; g.textBaseline='alphabetic';
+  const mt = g.measureText(ch);
+  const asc = mt.actualBoundingBoxAscent||fontPx*.7, desc = mt.actualBoundingBoxDescent||fontPx*.2;
+  const y = W/2 + (asc-desc)/2;
+  function drawGuide(){
+    g.clearRect(0,0,W,W);
+    g.font=font; g.textAlign='center';
+    g.fillStyle='#ECEAF6'; g.fillText(ch, W/2, y);
+    g.setLineDash([6,8]); g.lineWidth=3; g.strokeStyle='#B9B2D9'; g.strokeText(ch, W/2, y); g.setLineDash([]);
+  }
+  drawGuide();
+  // masque de la lettre (basse résolution) pour mesurer la couverture
+  const R=120, sc=R/W;
+  const mk=document.createElement('canvas'); mk.width=mk.height=R; const m=mk.getContext('2d');
+  m.scale(sc,sc); m.font=font; m.textAlign='center'; m.fillStyle='#000'; m.fillText(ch,W/2,y);
+  const maskData = m.getImageData(0,0,R,R).data;
+  const mz=document.createElement('canvas'); mz.width=mz.height=R; const z=mz.getContext('2d');
+  z.scale(sc,sc); z.font=font; z.textAlign='center'; z.fillStyle='#000'; z.strokeStyle='#000'; z.lineWidth=W*0.09; z.lineJoin='round'; z.fillText(ch,W/2,y); z.strokeText(ch,W/2,y);
+  const zoneData = z.getImageData(0,0,R,R).data;
+  let maskCount=0; for(let p=3;p<maskData.length;p+=4) if(maskData[p]>100) maskCount++;
+  const lw = W*0.075;
+  const colors=['#FF6B6B','#4D96FF','#6BCB77','#9B5DE5','#FF9F68'];
+  d.lineCap='round'; d.lineJoin='round'; d.lineWidth=lw; d.strokeStyle=rnd(colors);
+  let drawing=false, last=null, done=false;
+  const pos = e=>{ const r=dc.getBoundingClientRect(); return [(e.clientX-r.left)*(W/r.width),(e.clientY-r.top)*(W/r.height)]; };
+  function check(){
+    const u=document.createElement('canvas'); u.width=u.height=R; const uc=u.getContext('2d'); uc.drawImage(dc,0,0,R,R);
+    const ud=uc.getImageData(0,0,R,R).data; let cov=0, ink=0, out=0;
+    for(let p=3;p<ud.length;p+=4){ if(ud[p]>60){ ink++; if(maskData[p]>100) cov++; if(zoneData[p]<60) out++; } }
+    const coverage = maskCount? cov/maskCount : 0;
+    $('#m').style.width = Math.min(100, coverage/0.6*100)+'%';
+    if(!done && coverage>=0.6 && ink>0 && out/ink<0.25){
+      done=true; vibrate(60); const st=addStar(); celebrate(st||'🌟');
+      say(['ar',nm]).then(praise);
+    } else if(!done && ink>0 && out/ink>=0.25 && coverage>=0.45){
+      say(['fr','Reste bien sur la lettre !']);
+    }
+  }
+  dc.addEventListener('pointerdown',e=>{ e.preventDefault(); dc.setPointerCapture(e.pointerId); drawing=true; last=pos(e); d.beginPath(); d.moveTo(...last); d.lineTo(last[0]+.1,last[1]+.1); d.stroke(); });
+  dc.addEventListener('pointermove',e=>{ if(!drawing) return; const p=pos(e); d.beginPath(); d.moveTo(...last); d.lineTo(...p); d.stroke(); last=p; });
+  const up=()=>{ if(!drawing) return; drawing=false; check(); };
+  dc.addEventListener('pointerup',up); dc.addEventListener('pointercancel',up);
+  $('#clr').onclick=()=>{ d.clearRect(0,0,W,W); d.strokeStyle=rnd(colors); done=false; $('#m').style.width='0'; };
+  $('#rep').onclick=()=>say(['ar',nm]);
+  $('#nx').onclick=()=>{ stack.pop(); go(Trace,kind, i>=max?0:i+1); };
+  say(['fr','Trace'],['ar',nm]);
+}
+
+// ----- Fin de partie -----
+function End(score, total, replay, msg){
+  const ratio = score/total;
+  const emo = ratio>=.8?'🏆':ratio>=.5?'🌟':'💪';
+  const n = childName();
+  app.innerHTML = bar('Bravo !') + `
+    <div class="end">
+      <div class="emo">${emo}</div>
+      <div class="ar">أَحْسَنْتَ${n?' يَا '+n:''}!</div>
+      <h2>${msg || `${score} ${score>1?'étoiles gagnées':'étoile gagnée'} sur ${total}`}</h2>
+      <div class="row" style="margin-top:20px">
+        <button class="big" style="background:var(--teal)" id="again">🔁 Rejouer</button>
+        <button class="big" style="background:var(--plum)" onclick="home()">🏠 Accueil</button>
+      </div>
+    </div>`;
+  $('#again').onclick = replay;
+  celebrate(emo);
+  say(['ar','أَحْسَنْتَ'],['fr', ratio>=.5?'Tu as très bien joué'+(n?' '+n:'')+' !':'Continue, tu progresses'+(n?' '+n:'')+' !']);
+}
+
+// ----- Autocollants -----
+function Stickers(){
+  const got = Math.min(Math.floor(S.stars/STARS_PER_STICKER), STICKERS.length);
+  const left = STARS_PER_STICKER - (S.stars % STARS_PER_STICKER);
+  app.innerHTML = bar('Mes autocollants') + `
+    <p class="hint" style="font-size:18px;margin-top:0">${got<STICKERS.length?`Encore ${left} ⭐ pour le prochain autocollant !`:'Tu as tous les autocollants ! 🏆'}</p>
+    <div class="grid g4">${STICKERS.map((s,k)=>`<button class="stk ${k<got?'':'lock'}">${k<got?s:'❓'}</button>`).join('')}</div>`;
+}
+
+// ----- Espace parent -----
+function Parent(){
+  app.innerHTML = bar('Espace parent', false) + `
+  <div class="hero parent" style="text-align:left">
+    <label for="nm">Prénom de l'enfant</label>
+    <input id="nm" value="${S.name.replace(/"/g,'&quot;')}" placeholder="ex. Adam" maxlength="20">
+    <label for="dg">Affichage des chiffres</label>
+    <select id="dg">
+      <option value="both" ${S.digits==='both'?'selected':''}>Les deux (١ et 1)</option>
+      <option value="ar" ${S.digits==='ar'?'selected':''}>Chiffres arabes orientaux (١ ٢ ٣)</option>
+      <option value="lat" ${S.digits==='lat'?'selected':''}>Chiffres occidentaux (1 2 3)</option>
+    </select>
+    <label for="rt">Vitesse de la voix</label>
+    <select id="rt">
+      <option value="0.7" ${S.rate==0.7?'selected':''}>Lente</option>
+      <option value="0.85" ${S.rate==0.85?'selected':''}>Normale</option>
+      <option value="1" ${S.rate==1?'selected':''}>Rapide</option>
+    </select>
+    <div class="row" style="margin-top:18px;justify-content:flex-start">
+      <button class="big" style="background:var(--sky)" id="test">🔊 Tester la voix arabe</button>
+    </div>
+    <div class="sect">Progression</div>
+    <div>⭐ ${S.stars} étoiles · 🔤 ${S.seenL.length}/28 lettres vues · 🔢 ${S.seenN.length}/11 chiffres vus</div>
+    <div class="row" style="margin-top:18px;justify-content:flex-start">
+      <button class="big" style="background:var(--coral)" id="reset">♻️ Remettre à zéro</button>
+    </div>
+    <p class="hint" style="text-align:left">Si la voix arabe ne marche pas : Paramètres Android › Système › Langues › Synthèse vocale › Moteur Google › installer les données vocales « Arabe ».</p>
+  </div>`;
+  $('#nm').oninput = e=>{ S.name=e.target.value; save(); };
+  $('#dg').onchange = e=>{ S.digits=e.target.value; save(); };
+  $('#rt').onchange = e=>{ S.rate=parseFloat(e.target.value); save(); };
+  $('#test').onclick = ()=>say(['ar','مَرْحَبًا'+(childName()?' '+childName():'')+'، أَلِف، بَاء، تَاء']);
+  $('#reset').onclick = ()=>{ if(app.querySelector('#reset').dataset.c){ S=Object.assign({},DEFAULT,{name:S.name,digits:S.digits,rate:S.rate}); save(); Parent(); } else { const b=app.querySelector('#reset'); b.dataset.c=1; b.textContent='Toucher encore pour confirmer'; } };
+}
+
+// ---------- DÉMARRAGE ----------
+document.addEventListener('backbutton', e=>{ e.preventDefault(); back(); });
+(function initNative(){
+  const A = nativePlugin('App');
+  if(A){ A.addListener('backButton', ()=>{ if(stack.length>1) back(); else A.exitApp(); }); }
+})();
+home();
+</script>
+</body>
+</html>
